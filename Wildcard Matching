@@ -1,0 +1,33 @@
+#include <string>
+using namespace std;
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int sIdx = 0, pIdx = 0;
+        int lastStarIdx = -1;
+        int sTempIdx = -1;
+        while (sIdx < s.length()) {
+            if (pIdx < p.length() && (p[pIdx] == '?' || p[pIdx] == s[sIdx])) {
+                sIdx++;
+                pIdx++;
+            }
+            else if (pIdx < p.length() && p[pIdx] == '*') {
+                lastStarIdx = pIdx;
+                sTempIdx = sIdx;
+                pIdx++; 
+            }
+            else if (lastStarIdx != -1) {
+                pIdx = lastStarIdx + 1; 
+                sTempIdx++;            
+                sIdx = sTempIdx;        
+            }
+            else {
+                return false;
+            }
+        }
+        while (pIdx < p.length() && p[pIdx] == '*') {
+            pIdx++;
+        }
+        return pIdx == p.length();
+    }
+};
