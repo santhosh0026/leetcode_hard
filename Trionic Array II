@@ -1,0 +1,34 @@
+class Solution {
+public:
+    long long maxSumTrionic(vector<int>& nums) {
+        int n = nums.size();
+        long long ans = LLONG_MIN;
+        for (int i = 0; i < n; ) {
+            int p = i;
+            while (p + 1 < n && nums[p] < nums[p + 1]) p++;
+            if (p == i) { i++; continue; }
+            int q = p;
+            while (q + 1 < n && nums[q] > nums[q + 1]) q++;
+            if (q == p || q == n - 1 || nums[q] >= nums[q + 1]) {
+                i = p + 1; continue;
+            }
+            long long coreSum = 0;
+            for (int k = p - 1; k <= q + 1; k++) coreSum += nums[k];
+            long long leftMax = 0, leftTemp = 0;
+            for (int k = p - 2; k >= i; k--) {
+                leftTemp += nums[k];
+                leftMax = max(leftMax, leftTemp);
+            }
+            long long rightMax = 0, rightTemp = 0;
+            int r = q + 2;
+            while (r < n && nums[r] > nums[r - 1]) {
+                rightTemp += nums[r];
+                rightMax = max(rightMax, rightTemp);
+                r++;
+            }
+            ans = max(ans, coreSum + leftMax + rightMax);
+            i = p; 
+        }
+        return ans;
+    }
+};
